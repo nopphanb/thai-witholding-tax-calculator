@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withholding Tax & VAT Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+        <h2 class="text-2xl font-bold mb-4">Withholding Tax & VAT Calculator</h2>
+        
+        <label for="amount" class="block text-left font-medium">Amount:</label>
+        <input type="number" id="amount" class="w-full p-2 border rounded-md mb-1" placeholder="Enter amount">
+        <p id="amount-error" class="text-red-500 text-sm hidden">Please enter a valid amount.</p>
+        
+        <label for="tax" class="block text-left font-medium mt-2">Withholding Tax Percentage (%):</label>
+        <input type="number" id="tax" class="w-full p-2 border rounded-md mb-1" placeholder="Enter tax %" value="3">
+        <p id="tax-error" class="text-red-500 text-sm hidden">Please enter a valid tax percentage.</p>
+        
+        <button onclick="calculateFinalAmount()" class="w-full bg-blue-500 text-white py-2 rounded-md mt-4 hover:bg-blue-600">Calculate</button>
+        
+        <h3 class="text-xl font-semibold mt-4">Final Amount: <span id="result">0</span></h3>
+        <p id="calculation-details" class="text-sm text-gray-700 mt-2"></p>
+    </div>
+
+    <script>
+        function calculateFinalAmount() {
+            let amount = parseFloat(document.getElementById("amount").value);
+            let tax = parseFloat(document.getElementById("tax").value);
+            let vat = 7; // Fixed VAT at 7%
+            
+            let amountError = document.getElementById("amount-error");
+            let taxError = document.getElementById("tax-error");
+            amountError.classList.add("hidden");
+            taxError.classList.add("hidden");
+            
+            if (isNaN(amount)) {
+                amountError.classList.remove("hidden");
+                return;
+            }
+            if (isNaN(tax)) {
+                taxError.classList.remove("hidden");
+                return;
+            }
+            
+            let taxAmount = amount * (tax / 100);
+            let amountAfterWithholding = amount - taxAmount;
+            let vatAmount = amount * (vat / 100);
+            let finalAmount = amountAfterWithholding + vatAmount;
+            
+            document.getElementById("result").textContent = finalAmount.toFixed(2);
+            document.getElementById("calculation-details").innerHTML = 
+                `Withholding Tax: ${taxAmount.toFixed(2)}<br>
+                 Amount After Withholding: ${amountAfterWithholding.toFixed(2)}<br>
+                 VAT (7%): ${vatAmount.toFixed(2)}<br>
+                 Final Amount: ${finalAmount.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
